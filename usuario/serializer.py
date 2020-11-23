@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from core import models
 from pedido import serializer as pedido_serializer
+from rest_framework.authtoken.models import Token
+from rest_framework import serializers
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
@@ -14,7 +16,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
         depth = 1
 
-class UserSigninSerializer(serializers.Serializer):
 
-    email = serializers.CharField(required = True)
-    password = serializers.CharField(required = True)
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.CharField(max_length=300, required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+
+class EmptySerializer(serializers.Serializer):
+    pass

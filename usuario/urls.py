@@ -1,5 +1,9 @@
 from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter(trailing_slash=False)
+router.register('api/auth', views.AuthViewSet, basename='auth')
 
 urlpatterns = [
     path('get_all/', views.get_all),
@@ -9,4 +13,5 @@ urlpatterns = [
     path('update/<int:pk>', views.update),
     path('delete/<int:pk>', views.delete),
     path('activate/<int:pk>', views.activate),
+    path('login/', views.AuthViewSet.login)
 ]

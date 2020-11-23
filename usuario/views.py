@@ -1,10 +1,16 @@
 from rest_framework import permissions, authentication
 from rest_framework import generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from django.core.exceptions import ImproperlyConfigured
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from . import serializer
 from core import models
-from utils import response_handler
+from utils import response_handler, authenticate
 
 
 @api_view(['GET'])
@@ -112,3 +118,31 @@ def activate(request, pk):
     
     except RuntimeError:
         raise RuntimeError('Ocorreu um erro no sistema.')
+
+
+@csrf_exempt
+class AuthViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny, ]
+    serializer_class = serializer.EmptySerializer
+    serializer_classes = {
+        'login': serializer.UserLoginSerializer,
+    }
+
+    def get_serializer_class(self):
+        if not isinstance(self.serializer_classes, dict):
+            raise ImproperlyConfigured("serializer_classes should be a dict mapping.")
+
+        if self.action in self.serializer_classes.keys():
+            return self.serializer_classes[self.action]
+        return super().get_serializer_class()
+
+    @csrf_exempt
+    @action(methods=['POST', ], detail=False)
+    def login(self, request):
+        _serializer = self.get_serializer(data=request.data)
+        _serializer.is_valid(raise_exception=True)
+        user = authenticate.get_and_authenticate_user(**_serializer.validated_data)
+        data = serializer.UsuarioSerializer(user).data
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
