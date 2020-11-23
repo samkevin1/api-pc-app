@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     sobrenome = models.CharField(max_length=32)
     email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=11)
-    password = models.CharField(max_length=200)
+    password = models.CharField(max_length=250)
     role = models.BooleanField(default=False)
     ativo = models.BooleanField(default=True)
 
