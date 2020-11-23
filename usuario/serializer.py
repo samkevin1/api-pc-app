@@ -17,9 +17,6 @@ class UsuarioSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
         depth = 1
 
-    def create(self, validated_data):
-        return get_user_model().objects.create_user(**validated_data)
-
 
 class AuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField()
