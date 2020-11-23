@@ -1,5 +1,9 @@
 from django.db import models
 from django.forms import forms
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import BaseUserManager
+from django.conf import settings
 
 
 class Produto(models.Model):
@@ -13,18 +17,51 @@ class Produto(models.Model):
     processador = models.CharField(max_length=32, null=True)
 
 
-class Usuario(models.Model):
+class UserManager(BaseUserManager):
+    """Manager for user profiles"""
+
+    def create_user(self, email, nome, sobrenome, cpf, password=None,):
+        """Create a new user profile"""
+        if not email:
+            raise ValueError('User must have an email address')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, nome=nome, cpf=cpf, sobrenome=sobrenome)
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, nome, password):
+        """Create and save a new superuser with given details"""
+        user = self.model(email=email, name=nome)
+
+        user.set_password(password)
+        user.is_superuser = True
+        user.role = True
+        user.save(using=self._db)
+
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    """Database model for users in the system"""
     nome = models.CharField(max_length=32)
     sobrenome = models.CharField(max_length=32)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=11)
     password = models.CharField(max_length=64)
-    role = models.CharField(max_length=12)
+    role = models.BooleanField(default=False)
     ativo = models.BooleanField(default=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
 
 
 class Pedido(models.Model):
-    usuario = models.ForeignKey(Usuario, related_name='pedido_usuario', on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, related_name='pedido_usuario', on_delete=models.CASCADE)
     status = models.CharField(max_length=32)
     valor_total = models.DecimalField(max_digits=5, decimal_places=2)
     data_pedido = models.DateTimeField(auto_now_add=True)

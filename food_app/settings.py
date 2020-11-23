@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'utils',
     'corsheaders',
     'rest_framework.authtoken',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -140,6 +141,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 import django_heroku
@@ -153,3 +155,5 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:3000',
 ]
+
+AUTH_USER_MODEL = 'core.User'
