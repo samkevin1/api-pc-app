@@ -10,11 +10,12 @@ class Produto(models.Model):
     nome = models.CharField(max_length=32)
     vista = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     prazo = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    imagem = models.CharField(max_length=128)
+    imagem = models.CharField(max_length=1000)
     ativo = models.BooleanField(default=True)
     ram = models.CharField(max_length=32, null=True)
     placaVideo = models.CharField(max_length=32, null=True)
     processador = models.CharField(max_length=32, null=True)
+    oferta = models.BooleanField(default=False)
 
 
 class UserManager(BaseUserManager):
