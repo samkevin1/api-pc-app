@@ -12,7 +12,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ('id', 'nome', 'sobrenome', 'email', 'cpf', 'password',
+        fields = ('id', 'nome', 'sobrenome', 'email', 'cpf', 'senha',
                  'role', 'ativo', 'pedidos',)
         read_only_fields = ('id',)
         depth = 1
@@ -23,16 +23,16 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
 class AuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField()
-    password = serializers.CharField(style={'input_type': 'password'}, trim_whitespace=False)
+    senha = serializers.CharField(trim_whitespace=False)
 
     def validate(self, attrs):
         email = attrs.get('email')
-        password = attrs.get('password')
+        senha = attrs.get('senha')
 
         user = authenticate(
             request=self.context.get('request'),
             username=email,
-            password=password
+            password=senha
         )
         if not user:
             msg = 'Unable to authenticate with provided credentials'

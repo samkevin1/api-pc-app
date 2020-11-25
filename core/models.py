@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.forms import forms
 from django.contrib.auth.models import AbstractBaseUser
@@ -21,15 +22,15 @@ class Produto(models.Model):
 class UserManager(BaseUserManager):
     """Manager for user profiles"""
 
-    def create_user(self, email, nome, sobrenome, cpf, password=None,):
+    def create_user(self, email, nome, sobrenome, cpf, senha,):
         """Create a new user profile"""
         if not email:
             raise ValueError('User must have an email address')
 
         email = self.normalize_email(email)
-        user = self.model(email=email, nome=nome, cpf=cpf, sobrenome=sobrenome, password=password)
+        user = self.model(email=email, nome=nome, cpf=cpf, sobrenome=sobrenome)
 
-        user.set_password(password)
+        user.set_password(senha)
         user.save(using=self._db)
 
         return user
@@ -52,14 +53,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     sobrenome = models.CharField(max_length=32)
     email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=11)
-    password = models.CharField(max_length=250)
+    senha = models.CharField(max_length=250)
     role = models.BooleanField(default=False)
     ativo = models.BooleanField(default=True)
 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-
 
 
 class Pedido(models.Model):

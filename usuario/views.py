@@ -125,4 +125,3 @@ class CreateTokenView(ObtainAuthToken):
 
     serializer_class = serializer.AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
-
