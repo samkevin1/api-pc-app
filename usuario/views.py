@@ -125,3 +125,15 @@ class CreateTokenView(ObtainAuthToken):
 
     serializer_class = serializer.AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+    def post(self, request, *args, **kwargs):
+
+        _serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        _serializer.is_valid(raise_exception=True)
+        user = _serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+
+        _user = models.User.objects.get(email__exact=user.email)
+        __serializer = serializer.UsuarioSerializer(instance=_user)
+        return Response({'success': True, 'message': 'Usuário logado com sucesso!', 'token': token.key, 'data': __serializer.data})
