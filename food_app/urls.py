@@ -20,7 +20,6 @@ from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/pedido/', include('pedido.urls')),
-    path('api/v1/item/', include('item.urls')),
     path('api/v1/produto/', include('produto.urls')),
     path('api/v1/usuario/', include('usuario.urls')),
 ]

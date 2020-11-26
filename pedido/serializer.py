@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from core import models
-from item import serializer as item_serializer
+from produto import serializer as produto_serializer
 
 
 class PedidoSerializer(serializers.ModelSerializer):
 
-    itens = item_serializer.ItemSerializer(many=True, read_only=True, source="item_pedido")
-
     class Meta:
         model = models.Pedido
-        fields = ('id', 'status', 'valor_total', 'data_pedido', 'ativo', 'usuario', 'itens',)
+        fields = ('id', 'valor_total', 'data_pedido', 'ativo', 'usuario', 'produtos',)
         read_only_fields = ('id',)

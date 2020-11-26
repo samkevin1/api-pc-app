@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'core',
     'usuario',
     'pedido',
-    'item',
     'produto',
     'utils',
     'corsheaders',

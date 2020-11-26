@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/food_delivery</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="db" uuid="5519572e-e0bd-4efb-bf9f-2e0d49f8e019">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\samue\Documents\UVV\Desenvolvimento Mobile\pc-app\api-pc-app\db.sqlite3</jdbc-url>
+    </data-source>
   </component>
 </project>
